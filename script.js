@@ -3,7 +3,7 @@ var hero = {
   top: 700,
 };
 
-var enemieStep = 10;
+var enemieStep = 1;
 var missileStep = 10;
 var score = 0;
 
