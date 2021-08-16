@@ -3,20 +3,23 @@ var hero = {
   top: 700,
 };
 
-var enemieStep = 1;
+var enemieStep = 10;
 var missileStep = 10;
 var score = 0;
 
 var missiles = [];
-
-let enemies = [];
-for (let top = 100; top < 200; top += 75) {
-  for (let left = 200; left < 1000; left += 100) {
-    enemies.push({ left: left, top: top });
+var enemies = [];
+function createGame() {
+  missiles = [];
+  enemies = [];
+  for (let top = 100; top < 200; top += 75) {
+    for (let left = 200; left < 1000; left += 100) {
+      enemies.push({ left: left, top: top });
+    }
   }
 }
 
-document.onkeydown = function (e) {
+var onpressed = function (e) {
   if (e.keyCode === 37 && hero.left >= 0) {
     hero.left = hero.left - 10;
   }
@@ -32,6 +35,7 @@ document.onkeydown = function (e) {
   }
   drawHero();
 };
+document.onkeydown = onpressed;
 
 function drawHero() {
   document.getElementById("hero").style.left = hero.left + "px";
@@ -54,9 +58,9 @@ function moveMissiles() {
 }
 
 function drawEnemies() {
-  document.getElementById("enemies").innerHTML = "";
+  document.querySelector("#enemies").innerHTML = "";
   enemies.forEach((enemie) => {
-    document.getElementById("enemies").innerHTML += `
+    document.querySelector("#enemies").innerHTML += `
             <div class="enemy" style="left:${enemie.left}px; top:${enemie.top}px;"></div>
             `;
   });
@@ -104,6 +108,8 @@ function gameLoop() {
   shooting();
   gameEnd();
 }
+
+createGame();
 gameLoop();
 
 function gameEnd() {
@@ -115,13 +121,21 @@ function gameEnd() {
 }
 
 function displayMessage(message) {
-  let container = document.getElementById("background");
+  let container = document.querySelector("#background");
   let result = document.createElement("div");
   result.setAttribute("class", "result");
+  let button = document.createElement("button");
+  button.onclick = function () {
+    createGame();
+    gameLoop();
+    result.style.display = "none";
+    document.onkeydown = onpressed;
+  };
+  button.textContent = "restart";
   result.innerText = message;
 
+  result.appendChild(button);
   container.appendChild(result);
-
   clearTimeout(game);
   disable();
 }
