@@ -18,6 +18,7 @@ function createGame() {
       enemies.push({ left: left, top: top });
     }
   }
+  document.querySelector(".blast-container").innerHTML = "";
 }
 
 var onpressed = function (e) {
@@ -52,6 +53,12 @@ function drawMissiles() {
   });
 }
 
+function drawBlast(left, top) {
+  document.querySelector(".blast-container").innerHTML = `
+    <div class="blast" style="left:${left}px; top:${top}px;"></div>
+    `;
+}
+
 function moveMissiles() {
   missiles.forEach((missile) => {
     missile.top = missile.top - missileStep;
@@ -82,6 +89,7 @@ function shooting() {
         missiles[missile].left <= enemies[enemy].left + 50 &&
         missiles[missile].top <= enemies[enemy].top + 50
       ) {
+        drawBlast(enemies[enemy].left, enemies[enemy].top);
         enemies.splice(enemy, 1);
         missiles.splice(missile, 1);
         score += 10;
@@ -94,11 +102,7 @@ function enemyChecker() {
   document.querySelector("#score").innerText = score;
   return enemies.some((data) => data.top === 645);
 }
-function disable() {
-  document.onkeydown = function (e) {
-    return false;
-  };
-}
+
 let game;
 function gameLoop() {
   game = setTimeout(gameLoop, 100);
@@ -138,5 +142,5 @@ function displayMessage(message) {
   result.appendChild(button);
   container.appendChild(result);
   clearTimeout(game);
-  disable();
+  document.onkeydown = null;
 }
