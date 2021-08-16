@@ -12,6 +12,7 @@ var enemies = [];
 function createGame() {
   missiles = [];
   enemies = [];
+  score = 0;
   for (let top = 100; top < 200; top += 75) {
     for (let left = 200; left < 1000; left += 100) {
       enemies.push({ left: left, top: top });
